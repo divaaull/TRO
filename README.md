@@ -32,3 +32,25 @@ Proyek ini dibagi menjadi dua tahap utama:
    - Latar belakang, model, solusi, visualisasi, analisis sensitivitas, rekomendasi
 
 ## 📁 Struktur Folder
+
+
+## 👥 Anggota Kelompok
+- Koordinator: [Nama Kamu]
+- Anggota 1: (jika ada)
+- Anggota 2: (jika ada)
+
+## 🛠️ Tools yang Digunakan
+- Microsoft Excel (Excel Solver)
+- Python (opsional)
+- GitHub (rekam jejak kontribusi)
+- Docs / Word / Markdown
+
+## ✅ Status Proyek
+- [x] Struktur folder selesai
+- [ ] Input data awal
+- [ ] Formulasi model
+- [ ] Solusi awal (UTS)
+- [ ] Eksplorasi & laporan akhir (UAS)
+
+## 📌 Catatan
+Setiap anggota wajib melakukan commit sesuai tugas masing-masing agar rekam jejak kontribusi tercatat dengan baik.
