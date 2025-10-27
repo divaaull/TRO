@@ -1,0 +1,6 @@
+Judul studi kasus:
+Optimasi Persediaan Bahan Baku pada Kafe “Kafe Sejagat Rasa”
+
+1.1 Latar singkat kasus
+
+Kafe Sejagat Rasa adalah kafe kecil yang menyajikan produk minuman dan pangan ringan: kopi, smoothies, brownies, donut, tea, dan toast. Kafe beroperasi setiap hari dan menghadapi fluktuasi permintaan harian yang mempengaruhi tingkat persediaan. Pemesanan yang terlalu sering menaikkan biaya pemesanan tetap, sedangkan pemesanan berlebih meningkatkan biaya penyimpanan. Tujuan studi ini adalah menentukan kebijakan pemesanan (kapan dan berapa) untuk tiap bahan baku agar total biaya (biaya pemesanan tetap + biaya pembelian + biaya penyimpanan) minimum sambil memastikan permintaan terpenuhi setiap hari.
