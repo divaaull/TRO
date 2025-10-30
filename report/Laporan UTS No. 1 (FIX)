@@ -1,0 +1,57 @@
+1. TENTUKAN STUDI KASUS
+Judul studi kasus:
+Optimasi Persediaan Bahan Baku pada Kafe “Kafe Sejagat Rasa”
+
+1.1 Latar singkat kasus
+Kafe Sejagat Rasa adalah usaha F&B kecil yang menyediakan minuman dan makanan ringan: Kopi, Smoothies, Brownies, Donut, Tea, dan Toast. Kafe beroperasi setiap hari dan menghadapi fluktuasi permintaan harian yang berbeda tiap produk. Biaya pemesanan (ordering cost) dan biaya penyimpanan (holding cost) signifikan pada operasi skala kecil — pemesanan terlalu sering menaikkan total biaya pemesanan tetap, sedangkan pemesanan besar meningkatkan biaya penyimpanan. Selain itu, setiap produk memiliki lead time pengiriman yang berbeda sehingga keputusan pemesanan harus mempertimbangkan waktu tunggu agar stok tiba tepat waktu.
+Tujuan studi ini adalah menentukan kebijakan pemesanan (kapan pesan dan berapa banyak) untuk setiap bahan baku agar total biaya (biaya pemesanan tetap + biaya pembelian jika dimasukkan + biaya penyimpanan) terminimumkan sambil memastikan permintaan pelanggan terpenuhi sepanjang horizon perencanaan.
+
+1.2 Data input
+Catatan: semua biaya dinyatakan dalam Rupiah (Rp) dan permintaan dalam unit (satuan sesuai produk).
+Produk	d_per_day	D_per_year	S (Rp / order)	h (Rp / unit / year)	LeadTime (days)
+Kopi	60	21,900	75,000	2,500	7
+Smoothies	40	14,600	60,000	2,000	5
+Brownies	30	10,950	50,000	1,800	4
+Donat	35	12,775	45,000	1,600	3
+Tea	45	16,425	40,000	1,200	2
+Toast	25	9,125	30,000	1,000	2
+Keterangan singkat kolom:
+	d_per_day : permintaan rata-rata per hari.
+	D_per_year : permintaan per tahun (d_per_day × 365).
+	S : biaya tetap setiap kali melakukan pemesanan (ordering cost).
+	h : biaya penyimpanan per unit per tahun (holding cost/year). Untuk model harian, gunakan h_"per_day" =h/365.
+	LeadTime : waktu tunggu (hari) antara pemesanan dan penerimaan barang — penting untuk menghitung reorder point dan memodelkan kedatangan pesanan.
+
+1.3 Alasan pemilihan studi kasus
+	Relevansi praktis: Persediaan bahan baku adalah isu nyata bagi kafe kecil — langsung berdampak pada layanan dan biaya.
+	Cocok untuk metode RO: Permasalahan ini bisa dimodelkan dengan lot-sizing / inventory control (MILP) dan dianalisis dengan Excel/Python.
+	Variasi parameter: Adanya perbedaan S, h, dan LeadTime antar produk membuat studi ini menarik untuk analisis sensitivitas dan rekomendasi operasional.
+
+1.4 Ruang lingkup studi (batasan)
+	Objek: 6 bahan baku utama (Kopi, Smoothies, Brownies, Donut, Tea, Toast).
+	Horizon analisis: 7 hari (satu minggu). Namun beberapa parameter (D_per_year, h per year) disediakan untuk perhitungan EOQ/skaala tahunan bila dibutuhkan.
+	Lead time: gunakan LeadTime sesuai tabel (bukan 0). Model harus memperhitungkan bahwa pemesanan hari tbaru tersedia di hari t+"LeadTime" .
+	Biaya: meliputi biaya pemesanan tetap S per order dan biaya penyimpanan h (sudah dalam Rp/unit/year). Jika ingin memasukkan biaya pembelian per unit (Unit Cost), kolom tersebut belum disediakan — tambahkan jika perlu memasukkan purchase cost di fungsi tujuan.
+	Kebijakan stokout: diasumsikan permintaan harus dipenuhi (no backorder/no stockout). Jika ingin memperbolehkan backorder atau penalti stokout, model perlu dimodifikasi.
+	Kapasitas penyimpanan dan stok awal: nilai MaxStorage dan InitialInventory belum diberikan — kedua parameter ini perlu ditentukan sebelum menjalankan MILP. Jika tidak tersedia, kita dapat memilih asumsi wajar (mis. MaxStorage large) atau meminta data pemilik kafe.
+
+1.5 Tujuan studi
+	Memformulasikan masalah perencanaan pemesanan multibarang multi-periode dengan memperhitungkan lead time sebagai model MILP.
+	Menentukan keputusan pemesanan q_(i,t)(kuantitas) dan keputusan order y_(i,t)(0/1) untuk tiap produk dan hari sehingga total biaya minimal, tanpa melanggar constraint pemenuhan permintaan dan kapasitas.
+	Mengimplementasikan solusi menggunakan Excel Solver dan Python (pulp) untuk verifikasi.
+	Melakukan analisis sensitivitas terhadap parameter kunci (mis. S, h, lead time, dan kapasitas penyimpanan) pada UAS.
+	Memberikan rekomendasi operasional praktis (frekuensi pemesanan, ukuran pesanan, reorder point, dan saran safety stock bila diperlukan).
+
+1.6 Koreksi & rekomendasi (hal yang perlu ditambahkan / diperjelas)
+	Satuan biaya — pastikan konsistensi: semua biaya (S, h) pakai Rp (bukan ribu). Jika kamu menyukai skala ribu, jelaskan di laporan: “nilai dicatat dalam ribu Rp”.
+	Unit cost / Purchase price per unit — belum disediakan. Jika fungsi tujuan harus memasukkan biaya pembelian (serta perhitungan EOQ yang biasanya melibatkan harga unit), tambahkan kolom UnitCost. Jika tidak, model tetap valid fokus pada S + h.
+	Initial inventory (I0) dan MaxStorage per item — belum ada. Kedua parameter penting untuk model 7-hari; usulkan agar tim menentukan nilai awal (mis. I0 = 0–50 sesuai produk; MaxStorage sesuai kapasitas nyata). Aku bisa bantu usulkan nilai wajar bila kamu mau.
+	Safety stock — karena permintaan fluktuatif dan lead time > 0 untuk beberapa produk (Kopi lead time 7 hari), sebaiknya pertimbangkan menambahkan safety stock atau service level. Jika mau, aku hitung saran safety stock sederhana (mis. cover 1 hari rata-rata atau 95% service) — tapi perlu data variansi permintaan.
+	Skala horizon vs parameter tahunan — beberapa parameter (D_per_year, h per year) berskala tahunan sementara horizon kita 7 hari. Ingat untuk mengkonversi h ke biaya per hari: h_"per_day" =h/365ketika model memakai periode harian.
+
+1.7 Langkah selanjutnya (opsional, sebutkan yang kamu mau)
+	Aku bisa update model MILP menggunakan lead time yang ada (barang tiba di t+LT) dan menjalankan contoh solusi untuk horizon 7 hari — minta I0 & MaxStorage atau biarkan aku asumsi wajar.
+	Jika mau, aku hitung EOQ dan ROP untuk tiap produk sebagai panduan jangka panjang (meskipun EOQ kurang relevan untuk horizon 7 hari).
+	Aku bisa siapkan instruksi Excel yang memperhitungkan lead time (cara memindahkan aliran pesanan ke periode tiba).
+	Atau jalankan MILP di Python dan keluarkan q_{i,t}, I_{i,t}, y_{i,t} — butuh konfirmasi I0 & MaxStorage; jika kamu setuju, aku asumsikan I0 = 0 (atau nilai wajar) dan MaxStorage besar.
+
